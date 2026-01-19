@@ -1,7 +1,8 @@
 {
-  "name": "zopa-connect",
+  "name": "jacy-trading",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -27,11 +28,9 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@react-email/components": "^0.0.33",
     "@react-email/render": "^1.0.5",
-    "better-auth": "^1.2.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.40.0",
     "drizzle-zod": "^0.7.0",
     "lucide-react": "^0.477.0",
     "next": "15.2.0",
@@ -51,12 +50,27 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-dbml-generator": "^0.10.0",
-    "drizzle-kit": "^0.30.5",
     "eslint": "^9",
     "eslint-config-next": "15.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.19.3",
     "typescript": "^5"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app), enhanced with better authentication, Drizzle ORM, PostgreSQL, and Nodemailer.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Devipriya-41/jacy-solar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Devipriya-41/jacy-solar/issues"
+  },
+  "homepage": "https://github.com/Devipriya-41/jacy-solar#readme"
 }
