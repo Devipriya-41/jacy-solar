@@ -1,24 +1,27 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const slides = [
   {
-    image: '/images/carousel-1.jpg',
-    title: 'Human Centric Trading',
-    description: 'A Human-centric Approach in Trading, a New Way, One that is Centred Around the Values, Needs and Expectation of People.',
+    image: "/img/carousel-1.jpg",
+    title: "Human Centric Trading",
+    description:
+      "A Human-centric Approach in Trading, a New Way, One that is Centred Around the Values, Needs and Expectation of People.",
   },
   {
-    image: '/images/carousel-2.jpg',
-    title: 'Consulting to Simplify',
-    description: 'Simplifying Businesses by Optimizing and Thereby Enhancing the Growth; Streamlining the Business Processes.',
+    image: "/img/carousel-2.jpg",
+    title: "Consulting to Simplify",
+    description:
+      "Simplifying Businesses by Optimizing and Thereby Enhancing the Growth; Streamlining the Business Processes.",
   },
   {
-    image: '/images/carousel-3.jpg',
-    title: 'Passion to Excel',
-    description: 'Leader in Current Technologies and Industry Domains to Create Impactful Solutions.',
+    image: "/img/carousel-3.jpg",
+    title: "Passion to Excel",
+    description:
+      "Leader in Current Technologies and Industry Domains to Create Impactful Solutions.",
   },
 ];
 
@@ -44,7 +47,7 @@ export const Hero = () => {
         <div
           key={index}
           className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === current ? 'opacity-100' : 'opacity-0'
+            index === current ? "opacity-100" : "opacity-0"
           }`}
         >
           <div className="relative w-full h-full">
@@ -59,7 +62,7 @@ export const Hero = () => {
             </div>
             <div className="absolute inset-0 bg-black bg-opacity-50" />
           </div>
-          
+
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
               <div className="max-w-2xl">
@@ -99,11 +102,11 @@ export const Hero = () => {
             key={index}
             onClick={() => setCurrent(index)}
             className={`w-3 h-3 rounded-full transition ${
-              index === current ? 'bg-primary' : 'bg-white bg-opacity-50'
+              index === current ? "bg-primary" : "bg-white bg-opacity-50"
             }`}
           />
         ))}
       </div>
     </div>
   );
-}
+};

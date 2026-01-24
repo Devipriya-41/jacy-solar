@@ -1,27 +1,30 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { Plane, Handshake, Wrench, ArrowRight } from 'lucide-react';
+import Image from "next/image";
+import Link from "next/link";
+import { Plane, Handshake, Wrench, ArrowRight } from "lucide-react";
 
 const services = [
   {
     icon: Plane,
-    title: 'Trading',
-    description: 'Discover a world of possibilities in trading with our extensive product selection, seamless logistics, and dedicated support, empowering your business growth.',
-    image: '/images/img-600x400-1.jpg',
+    title: "Trading",
+    description:
+      "Discover a world of possibilities in trading with our extensive product selection, seamless logistics, and dedicated support, empowering your business growth.",
+    image: "/img/img-600x400-1.jpg",
   },
   {
     icon: Handshake,
-    title: 'Consulting',
-    description: 'Expert consulting services tailored to your unique needs, guiding your business towards success with strategic insights and innovative solutions.',
-    image: '/images/img-600x400-2.jpg',
+    title: "Consulting",
+    description:
+      "Expert consulting services tailored to your unique needs, guiding your business towards success with strategic insights and innovative solutions.",
+    image: "/img/img-600x400-2.jpg",
   },
   {
     icon: Wrench,
-    title: 'Advisory',
-    description: 'Empowering your decisions with insightful advisory services, providing clarity and confidence in navigating complex challenges.',
-    image: '/images/img-600x400-3.jpg',
+    title: "Advisory",
+    description:
+      "Empowering your decisions with insightful advisory services, providing clarity and confidence in navigating complex challenges.",
+    image: "/img/img-600x400-3.jpg",
   },
 ];
 
@@ -61,9 +64,7 @@ export const Services = () => {
                   <h4 className="text-xl font-bold text-gray-800 mb-3 mt-8">
                     {service.title}
                   </h4>
-                  <p className="text-gray-600 mb-4">
-                    {service.description}
-                  </p>
+                  <p className="text-gray-600 mb-4">{service.description}</p>
                   <Link
                     href="/services"
                     className="text-primary hover:text-primary-dark font-medium inline-flex items-center gap-2 transition"
@@ -79,4 +80,4 @@ export const Services = () => {
       </div>
     </section>
   );
-}
+};

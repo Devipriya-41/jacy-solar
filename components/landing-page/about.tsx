@@ -19,7 +19,7 @@ export const About = () => {
           <div className="h-96 lg:h-full min-h-[400px]">
             <div className="relative w-full h-full">
               <Image
-                src="/images/about.jpg"
+                src="/img/about.jpg"
                 alt="About JACY Trading"
                 fill
                 className="object-cover rounded-lg shadow-lg"

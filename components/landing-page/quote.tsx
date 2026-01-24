@@ -84,7 +84,7 @@ export const QuoteForm = () => {
           <div className="h-64 lg:h-auto min-h-[400px]">
             <div className="relative w-full h-full">
               <Image
-                src="/images/quote.jpg"
+                src="/img/quote.jpg"
                 alt="Get a quote"
                 fill
                 className="object-cover"
