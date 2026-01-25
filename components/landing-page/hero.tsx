@@ -27,6 +27,7 @@ const slides = [
 
 export const Hero = () => {
   const [current, setCurrent] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
 
   const nextSlide = () => {
     setCurrent(current === slides.length - 1 ? 0 : current + 1);
@@ -37,42 +38,48 @@ export const Hero = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000);
-    return () => clearInterval(interval);
-  }, [current]);
+    if (!isHovering) {
+      const interval = setInterval(nextSlide, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [current, isHovering]);
 
   return (
-    <div className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+    <div 
+      className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       {slides.map((slide, index) => (
         <div
           key={index}
           className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === current ? "opacity-100" : "opacity-0"
+            index === current ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
+          style={{ transition: "opacity 1s ease-in-out" }}
         >
           <div className="relative w-full h-full">
-            <div className="relative w-full h-full">
-              <Image
-                src={slide.image}
-                alt={slide.title}
-                fill
-                className="object-cover"
-                priority={index === 0}
-              />
-            </div>
-            <div className="absolute inset-0 bg-black bg-opacity-50" />
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              fill
+              className="object-cover"
+              priority={index === 0}
+              sizes="100vw"
+            />
+            <div className="absolute inset-0" />
           </div>
 
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
               <div className="max-w-2xl">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 animate-slide-in-down">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
                   {slide.title}
                 </h1>
-                <p className="text-lg md:text-xl text-white mb-8 animate-fade-in">
+                <p className="text-lg md:text-xl text-white mb-8 opacity-90">
                   {slide.description}
                 </p>
-                <button className="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-8 rounded-full transition animate-slide-in-left">
+                <button className="bg-[#51cc82] hover:bg-[#3da566] text-white font-semibold py-3 px-8 rounded-full transition-colors duration-300 transform hover:scale-105">
                   Read More
                 </button>
               </div>
@@ -81,29 +88,37 @@ export const Hero = () => {
         </div>
       ))}
 
-      {/* Navigation Buttons */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 p-2 rounded-full transition"
-      >
-        <ChevronLeft className="w-6 h-6 text-dark" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 p-2 rounded-full transition"
-      >
-        <ChevronRight className="w-6 h-6 text-dark" />
-      </button>
+      {/* Arrows that appear on hover */}
+      <div className={`transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"}`}>
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-300"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-300"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
 
-      {/* Indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      {/* Dots indicator */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex gap-2">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrent(index)}
-            className={`w-3 h-3 rounded-full transition ${
-              index === current ? "bg-primary" : "bg-white bg-opacity-50"
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === current 
+                ? "bg-[#51cc82] w-6" 
+                : "bg-white/60 hover:bg-white"
             }`}
+            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>

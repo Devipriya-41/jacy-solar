@@ -97,7 +97,7 @@ export default function Header() {
                 onMouseLeave={() => setIsAboutDropdown(false)}
               >
                 <Link
-                  href="/about/jacy"
+                  href="/about"
                   className="text-gray-700 hover:text-primary transition font-medium"
                 >
                   About Us

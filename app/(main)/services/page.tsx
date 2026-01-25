@@ -97,7 +97,7 @@ const advisoryServices: ServiceCard[] = tradingServices.slice(0, 3);
 
 const ServicesPage = () => {
   return (
-    <>
+    <div>
       {/* Page Header */}
       <div className="relative py-20 mb-12 overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -225,7 +225,7 @@ const ServicesPage = () => {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

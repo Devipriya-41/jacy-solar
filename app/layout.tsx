@@ -3,8 +3,6 @@
 import type { Metadata } from "next";
 import { Open_Sans, Roboto } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
-import {Footer} from "@/components/footer";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -33,9 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${openSans.variable} ${roboto.variable}`}>
       <body className="font-sans antialiased bg-white text-gray-800">
-        <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );
