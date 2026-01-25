@@ -18,13 +18,11 @@ const About = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      {/* Page Header with Background Image - FIXED IMAGE PATH */}
+  
       <div className="relative py-20 mb-12 overflow-hidden">
-        {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
-          {/* FIX: Added proper image extension and fallback */}
           <Image
-            src="/img/carousel-1.jpg" // Changed from /img/carousel-1 to /img/carousel-1.jpg
+            src="/img/carousel-1.jpg" 
             alt="About Us Background"
             fill
             className="object-cover"
