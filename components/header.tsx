@@ -16,7 +16,7 @@ import {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isAboutDropdown, setIsAboutDropdown] = useState(false);
+  const [, setIsAboutDropdown] = useState(false);
 
   return (
     <>
@@ -97,21 +97,21 @@ export default function Header() {
                 onMouseLeave={() => setIsAboutDropdown(false)}
               >
                 <Link
-                  href="/about"
+                  href="/about/jacy"
                   className="text-gray-700 hover:text-primary transition font-medium"
                 >
                   About Us
                 </Link>
-                {isAboutDropdown && (
+                {/* {isAboutDropdown && (
                   <div className="absolute top-full left-0 bg-white shadow-lg rounded-md mt-2 py-2 min-w-[200px]">
                     <Link
-                      href="/features"
+                      href="/about"
                       className="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-primary transition"
                     >
                       Why Jacy?
                     </Link>
                   </div>
-                )}
+                )} */}
               </div>
 
               <Link
