@@ -1,57 +1,82 @@
+// db/seed.ts
 import { db } from "./index";
-import { categories } from "./schema/categories";
+import { users, accounts } from "./schema/auth-schema";
 import { eq } from "drizzle-orm";
+import { randomUUID } from "crypto";
+import bcrypt from "bcrypt";
 
-const categoryNames = [
-  "Agro",
-  "Automobiles",
-  "Branding & Marketing",
-  "Commodities",
-  "Electronic Components",
-  "Electrical Equipment",
-  "FMCG",
-  "Food & Beverage",
-  "Furniture",
-  "Hardware Tools",
-  "IT Hardware",
-  "IT Software & Tools",
-  "Mechanical Equipment",
-  "MEP",
-  "Medical Consumables",
-  "Office Supplies",
-  "Packing Material",
-  "Pharma Product",
-  "Professional Services",
-  "Safety & PPE",
-  "Transport",
-  "Telecom",
-  "Waste Management",
-  "Workplace Consumables",
-];
+export async function seedAdminUser() {
+  console.log("Seeding admin user...");
 
-export async function seedCategories() {
-  console.log("Seeding categories...");
+  const adminEmail = process.env.ADMIN_EMAIL || "priyavenkatesan41@gmail.com";
+  const adminName = process.env.ADMIN_NAME || "Super Admin";
+  const adminRole = process.env.ADMIN_ROLE || "super_admin";
+  const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
 
-  for (const name of categoryNames) {
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  try {
+    // First, delete existing admin user if exists (for clean reseed)
+    const existingAdmin = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, adminEmail));
 
-    try {
-      const existing = await db
-        .select()
-        .from(categories)
-        .where(eq(categories.slug, slug));
+    if (existingAdmin.length > 0) {
+      console.log(`⚠️  Existing admin found. Deleting for clean reseed...`);
 
-      if (existing.length === 0) {
-        await db.insert(categories).values({
-          name,
-          slug,
-        });
-        console.log(`Created category: ${name}`);
-      }
-    } catch (error) {
-      console.error(`Error creating category ${name}:`, error);
+      // Delete accounts first (due to foreign key)
+      await db.delete(accounts).where(eq(accounts.userId, existingAdmin[0].id));
+
+      // Then delete user
+      await db.delete(users).where(eq(users.email, adminEmail));
+
+      console.log("✅ Existing admin deleted");
     }
+
+    // Hash the password - ensure it's a string and properly hashed
+    console.log("Hashing password...");
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    console.log(
+      "Password hash created:",
+      hashedPassword.substring(0, 20) + "...",
+    );
+
+    // Create the user
+    const userId = randomUUID();
+    console.log("Creating user with ID:", userId);
+
+    await db.insert(users).values({
+      id: userId,
+      email: adminEmail,
+      name: adminName,
+      emailVerified: true,
+      role: adminRole,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    console.log("✅ User created");
+
+    // Create the password account for the user
+    await db.insert(accounts).values({
+      id: randomUUID(),
+      accountId: userId,
+      providerId: "credential",
+      userId: userId,
+      password: hashedPassword, // Store the bcrypt hash directly
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    console.log(`✅ Admin user created successfully`);
+    console.log(`   Email: ${adminEmail}`);
+    console.log(`   Name: ${adminName}`);
+    console.log(`   Role: ${adminRole}`);
+    console.log(`   Password: ${adminPassword}`);
+    console.log(`\n⚠️  IMPORTANT: Change your password after first login!`);
+  } catch (error) {
+    console.error("❌ Error seeding admin user:", error);
+    throw error;
   }
 
-  console.log("Categories seeding completed");
+  console.log("✅ Admin user seeding completed\n");
 }

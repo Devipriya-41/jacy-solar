@@ -10,7 +10,6 @@ import {
   organizationRoles
 } from "./auth/permissions-access-control";
 
-// This creates an auth client with the magic link plugin
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_APP_URL,
   plugins: [
@@ -30,36 +29,60 @@ export const authClient = createAuthClient({
   ],
 });
 
-// This exports the signIn, signOut, signUp and use
 export const { signIn, signOut, signUp, useSession } = authClient;
 
-// This function is used to sign in with social providers
+// Sign in with email and password
+export const signInWithPassword = async ({ 
+  email, 
+  password 
+}: { 
+  email: string; 
+  password: string; 
+}) => {
+  return await signIn.email(
+    {
+      email,
+      password,
+      callbackURL: "/admin/dashboard",
+    },
+    {
+      onSuccess: async (ctx) => {
+        console.log("Login successful", ctx);
+      },
+      onError: async (ctx) => {
+        console.error("Login error:", ctx.error.message);
+        throw new Error(ctx.error.message);
+      },
+    }
+  );
+};
+
+// Sign in with Magic Link
+export const signInWithMagicLink = async ({ email }: { email: string }) => {
+  return await signIn.magicLink(
+    {
+      email: email,
+      callbackURL: "/admin/dashboard",
+    },
+    {
+      onSuccess: async (ctx) => {
+        console.log("Magic link sent", ctx);
+      },
+      onError: async (ctx) => {
+        console.error("Magic link error:", ctx.error.message);
+        throw new Error(ctx.error.message);
+      },
+    }
+  );
+};
+
+// Sign in with social providers
 export const signInWithSocialProvider = async (
   provider: "google" | "linkedin" | "apple"
 ) => {
   return await signIn.social(
     {
       provider,
-      callbackURL: "/admin/dashboard",
-      // errorCallbackURL: "/error",
-      // newUserCallbackURL: "/new-user",
-    },
-    {
-      onSuccess: async (ctx) => {
-        console.log(ctx);
-      },
-      onError: async (ctx) => {
-        console.error(ctx.error.message);
-      },
-    }
-  );
-};
-
-// This function is used to sign in with Magic Link
-export const signInWithMagicLink = async ({ email }: { email: string }) => {
-  return await signIn.magicLink(
-    {
-      email: email,
       callbackURL: "/admin/dashboard",
     },
     {

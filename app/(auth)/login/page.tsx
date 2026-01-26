@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 import {
   Mail,
   Loader2,
@@ -13,16 +14,22 @@ import {
   FileText,
   Settings,
   Eye,
+  EyeOff,
+  AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { signInWithMagicLink } from "@/lib/auth-client";
+import { signInWithMagicLink, signInWithPassword } from "@/lib/auth-client";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const [loginMethod, setLoginMethod] = useState<"password" | "magic-link">(
     "password",
   );
@@ -30,14 +37,16 @@ export default function AdminLoginPage() {
   const handleMagicLinkLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
 
     try {
-      await signInWithMagicLink({
-        email,
-      });
+      await signInWithMagicLink({ email });
       setMagicLinkSent(true);
     } catch (error) {
       console.error("Magic link error:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to send magic link",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -46,10 +55,17 @@ export default function AdminLoginPage() {
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Add your password login logic here
-    setTimeout(() => {
+    setError("");
+
+    try {
+      await signInWithPassword({ email, password });
+      router.push("/admin/dashboard");
+    } catch (error) {
+      console.error("Password login error:", error);
+      setError(error instanceof Error ? error.message : "Invalid credentials");
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const adminFeatures = [
@@ -79,24 +95,17 @@ export default function AdminLoginPage() {
     <div className="h-screen flex flex-col lg:flex-row bg-gray-50 overflow-hidden">
       {/* Left Side - Admin Features */}
       <div className="lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800">
-        {/* Pattern Overlay */}
-        <div className="absolute inset-0 opacity-5">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `radial-gradient(circle at 25px 25px, #4ade80 2%, transparent 0%), 
-                              radial-gradient(circle at 75px 75px, #4ade80 2%, transparent 0%)`,
-              backgroundSize: "100px 100px",
-            }}
-          />
-        </div>
-
         <div className="relative h-full p-6 lg:p-8 flex flex-col">
           {/* Logo */}
           <div className="mb-4 lg:mb-6">
             <Link href="/" className="inline-flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-lg">
-                <Shield className="w-6 h-6 text-white" />
+              <div className="p-1 border border-white/10 rounded-lg">
+                <Image
+                  src="/img/logo-round.png"
+                  alt="SolarAdmin Logo"
+                  width={44}
+                  height={44}
+                />
               </div>
               <div>
                 <div className="text-xl font-bold text-white">SolarAdmin</div>
@@ -121,7 +130,7 @@ export default function AdminLoginPage() {
               </p>
             </div>
 
-            {/* Features Grid - Extra Compact */}
+            {/* Features Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:gap-3">
               {adminFeatures.map((feature, index) => (
                 <div
@@ -184,10 +193,22 @@ export default function AdminLoginPage() {
               </p>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
+                <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
+                <p className="text-xs text-red-800">{error}</p>
+              </div>
+            )}
+
             {/* Login Method Tabs */}
             <div className="flex mb-4 border-b border-gray-200">
               <button
-                onClick={() => setLoginMethod("password")}
+                onClick={() => {
+                  setLoginMethod("password");
+                  setError("");
+                  setMagicLinkSent(false);
+                }}
                 className={`flex-1 py-2 text-xs lg:text-sm font-medium border-b-2 transition-colors ${
                   loginMethod === "password"
                     ? "border-emerald-500 text-emerald-600"
@@ -197,7 +218,11 @@ export default function AdminLoginPage() {
                 Password Login
               </button>
               <button
-                onClick={() => setLoginMethod("magic-link")}
+                onClick={() => {
+                  setLoginMethod("magic-link");
+                  setError("");
+                  setMagicLinkSent(false);
+                }}
                 className={`flex-1 py-2 text-xs lg:text-sm font-medium border-b-2 transition-colors ${
                   loginMethod === "magic-link"
                     ? "border-emerald-500 text-emerald-600"
@@ -234,7 +259,10 @@ export default function AdminLoginPage() {
                 </Button>
               </div>
             ) : loginMethod === "password" ? (
-              <form onSubmit={handlePasswordLogin} className="space-y-3 lg:space-y-4">
+              <form
+                onSubmit={handlePasswordLogin}
+                className="space-y-3 lg:space-y-4"
+              >
                 <div className="space-y-2 lg:space-y-3">
                   <div>
                     <label className="text-xs lg:text-sm font-medium text-gray-700 mb-1 block">
@@ -260,7 +288,7 @@ export default function AdminLoginPage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" />
                       <Input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -269,9 +297,14 @@ export default function AdminLoginPage() {
                       />
                       <button
                         type="button"
+                        onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-3 top-1/2 transform -translate-y-1/2"
                       >
-                        <Eye className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" />
+                        {showPassword ? (
+                          <EyeOff className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" />
+                        ) : (
+                          <Eye className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-gray-400" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -309,7 +342,10 @@ export default function AdminLoginPage() {
                 </Button>
               </form>
             ) : (
-              <form onSubmit={handleMagicLinkLogin} className="space-y-3 lg:space-y-4">
+              <form
+                onSubmit={handleMagicLinkLogin}
+                className="space-y-3 lg:space-y-4"
+              >
                 <div>
                   <label className="text-xs lg:text-sm font-medium text-gray-700 mb-1 block">
                     Admin Email
@@ -360,9 +396,6 @@ export default function AdminLoginPage() {
           <div className="mt-3 lg:mt-4 text-center">
             <p className="text-xs text-gray-500">
               © {new Date().getFullYear()} SolarAdmin Dashboard
-              <span className="mx-1">•</span>
-              v2.4.1
-              <span className="mx-1">•</span>
               <Link
                 href="/support"
                 className="text-gray-600 hover:text-gray-900"

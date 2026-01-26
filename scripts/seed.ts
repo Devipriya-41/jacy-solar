@@ -1,12 +1,16 @@
 // src/scripts/seed.ts
-import { seedCategories } from '../db/seed';
+import { seedAdminUser } from "../db/seed";
 
 async function main() {
   try {
-    await seedCategories();
+    console.log(" Starting database seeding...\n");
+
+    await seedAdminUser();
+
+    console.log("\n🎉 All seeding completed successfully!");
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding database:', error);
+    console.error("❌ Error seeding database:", error);
     process.exit(1);
   }
 }
