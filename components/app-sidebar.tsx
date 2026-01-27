@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
@@ -11,18 +11,18 @@ import {
   Map,
   PieChart,
   Settings2,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // This is sample data.
 const data = {
@@ -50,19 +50,30 @@ const data = {
   ],
   navMain: [
     {
+      title: "Dashboard",
+      url: "/admin/dashboard",
+      icon: Frame,
+      // REMOVE isActive from Dashboard since it's not a collapsible item
+      // Only use isActive for items that have nested children
+    },
+    {
       title: "Masters",
-      url: "#",
+      url: "#", // Parent items with children should use "#" or empty string
       icon: Settings2,
-      isActive: true,
+      isActive: true, // This should expand the Masters section by default
       items: [
         {
-          title: "Categories",
-          url: "/admin/masters/categories",
+          title: "Hero Slides",
+          url: "/admin/masters/hero-slides",
         },
         {
-          title: "Industries",
-          url: "/admin/masters/industries",
-        }
+          title: "About Section",
+          url: "/admin/masters/about",
+        },
+        {
+          title: "Services Section",
+          url: "/admin/masters/services",
+        },
       ],
     },
     {
@@ -89,7 +100,7 @@ const data = {
         {
           title: "Ad Management",
           url: "/admin/vendors/ad-management",
-        }
+        },
       ],
     },
     {
@@ -148,7 +159,7 @@ const data = {
       icon: Map,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -165,5 +176,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

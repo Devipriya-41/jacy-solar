@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, mobile, specialNote } = body;
+    const { firstName, lastName, email, mobile } = body;
 
     // Validate required fields
     if (!firstName || !lastName || !email || !mobile) {
@@ -14,15 +14,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    console.log("Quote Request Received:", {
-      firstName,
-      lastName,
-      email,
-      mobile,
-      specialNote,
-      timestamp: new Date().toISOString(),
-    });
 
     // Simulate processing delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
